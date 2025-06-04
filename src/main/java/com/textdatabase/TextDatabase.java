@@ -25,7 +25,19 @@ public class TextDatabase {
 
     public Object getObject(String propertyName, String value){
         if(structureType == DatabaseStructureType.OBJECT){
-            return objectManager.getObject(propertyName, value);
+            return objectManager.instantiateObject(propertyName, value);
+        }
+        return null;
+    }
+    public Object getObject(String propertyName, int value){
+        if(structureType == DatabaseStructureType.OBJECT){
+            return objectManager.instantiateObject(propertyName, value + "");
+        }
+        return null;
+    }
+    public Object getObject(String propertyName, double value){
+        if(structureType == DatabaseStructureType.OBJECT){
+            return objectManager.instantiateObject(propertyName, value + "");
         }
         return null;
     }
@@ -50,6 +62,10 @@ public class TextDatabase {
             valueManager.setDouble(property, value);
         }
     }
+    public void deleteValue(String property){
+        valueManager.deleteProperty(property);
+    }
+
 
     public String getString(String property){
         if(structureType == DatabaseStructureType.VALUE){
@@ -94,7 +110,7 @@ public class TextDatabase {
 
     public void insertNewLine(){
         try(BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(fileLocation + "\\" + fileName, true))){
-            bos.write(10);
+            bos.write("\n".getBytes());
         }
         catch (IOException e){
             System.out.println(e.getMessage());
@@ -129,7 +145,6 @@ public class TextDatabase {
         }
         return objectType.getSimpleName();
     }
-
     public String getFileLocation(){
         return fileLocation;
     }

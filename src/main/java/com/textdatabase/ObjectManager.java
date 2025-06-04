@@ -15,7 +15,7 @@ public class ObjectManager {
         this.database = textDatabase;
     }
 
-    public Object getObject(String propertyName, String value){
+    public Object instantiateObject(String propertyName, String value){
         Object object = null;
         try{
             String[] propertiesAndValues = extractTextObject(propertyName, value);
@@ -81,13 +81,21 @@ public class ObjectManager {
                 List<String> fields = objectProperties.get(0);
                 List<String> values = objectProperties.get(1);
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(database.getObjectType().getSimpleName() + "{");
+                stringBuilder.append(database.getObjectType().getSimpleName()).append("{");
                 for(int i = 0; i < fields.size(); i++){
                     if(i < fields.size() - 1){
-                        stringBuilder.append(fields.get(i) + "=" + values.get(i) + "; ");
+                        stringBuilder
+                                .append(fields.get(i))
+                                .append("=")
+                                .append(values.get(i))
+                                .append("; ");
                     }
                     else{
-                        stringBuilder.append(fields.get(i) + "=" + values.get(i) + "}\n");
+                        stringBuilder
+                                .append(fields.get(i))
+                                .append("=")
+                                .append(values.get(i))
+                                .append("}\n");
                     }
                 }
                 bos.write(stringBuilder.toString().getBytes());

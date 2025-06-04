@@ -1,3 +1,7 @@
-- Solve new line insert problem: if an empty line exists when the split method is executed
+- Solve new line insert problem on value insertion: if an empty line exists when the split method is executed
   those empty lines are removed and a new value is inserted right after
-  the last non empty line
+  the last non-empty line
+
+- Refactor readInt, readDouble, readString methods by creating
+  a read file method which returns entire file content
+  and include it in every above-mentioned methods

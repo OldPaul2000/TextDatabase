@@ -10,16 +10,16 @@ public class ValueManager {
         this.database = textDatabase;
     }
 
-    public void deleteValue(String value){
+    public void deleteProperty(String property){
         try(BufferedInputStream bis = new BufferedInputStream(new FileInputStream(database.getFileLocation() + "\\" + database.getFileName()))){
             String[] lines = new String(bis.readAllBytes()).split("\n");
             StringBuilder newData = new StringBuilder();
             for(String line:lines){
-                if(!line.startsWith(value + "=")){
-                    newData.append(line + "\n");
+                if(!line.startsWith(property + "=") || line.isBlank()){
+                    newData.append(line).append("\n");
                 }
             }
-            writeFile(newData.toString());
+            writeFile(newData.toString(), false);
         }
         catch (IOException e){
             System.out.println(e.getMessage());
@@ -56,21 +56,28 @@ public class ValueManager {
         String[] lines = fileTempContent.split("\n");
         StringBuilder newData = new StringBuilder();
         for(String line:lines){
-            if(!line.startsWith(property + "=") && !line.isEmpty()){
-                newData.append(line + "\n");
+            if(!line.startsWith(property + "=")){
+                newData.append(line).append("\n");
             }
             else{
-                newData.append(property + "=" + value + "\n");
+                newData.append(property)
+                        .append("=")
+                        .append(value)
+                        .append("\n");
                 propertyFound = true;
             }
         }
         if(!propertyFound){
-            newData.append(property + "=" + value + "\n");
+            String newValue = property + "=" + value + "\n";
+            writeFile(newValue, true);
         }
-        writeFile(newData.toString());
+        else{
+            writeFile(newData.toString(), false);
+        }
+
     }
-    private void writeFile(String content){
-        try(BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(database.getFileLocation() + "\\" + database.getFileName()))){
+    private void writeFile(String content, boolean append){
+        try(BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(database.getFileLocation() + "\\" + database.getFileName(), append))){
             bos.write(content.getBytes());
         }
         catch (IOException e){
